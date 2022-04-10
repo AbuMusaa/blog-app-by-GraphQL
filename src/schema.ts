@@ -32,12 +32,12 @@ export const typeDefs = gql`
     user: User!
   }
 
-  type UserError {
+  type UserErrors {
     massage: String!
   }
 
   type PostPayload {
-    userError: [UserError!]!
+    userErrors: [UserErrors!]!
     post: Post
   }
 `;
