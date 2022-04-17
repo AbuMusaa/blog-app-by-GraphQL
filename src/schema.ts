@@ -35,7 +35,7 @@ export const typeDefs = gql`
   }
 
   type UserErrors {
-    massage: String!
+    message: String!
   }
 
   type PostPayload {

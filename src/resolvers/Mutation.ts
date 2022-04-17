@@ -1,5 +1,4 @@
 import { Post, Prisma } from "@prisma/client";
-import { stripIgnoredCharacters } from "graphql";
 import { Context } from "../index";
 
 interface PostArgs {
@@ -56,7 +55,9 @@ export const Mutation = {
   ): Promise<PostPayloadType> => {
     const { title, content } = post;
 
-    if (!title || !content) {
+    if (!title && !content) {
+      console.log("check");
+
       return {
         userErrors: [
           {
