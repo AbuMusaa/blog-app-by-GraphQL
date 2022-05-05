@@ -1,5 +1,7 @@
+import { User, Prisma } from "@prisma/client";
 import { Context } from "../../index";
 import validator from "validator";
+import bcrypt from "bcryptjs";
 
 interface SingupArgs {
   email: string;
@@ -12,7 +14,7 @@ interface UserPayload {
   userErrors: {
     message: string;
   }[];
-  user: null;
+  user: User | Prisma.Prisma__UserClient<User> | null;
 }
 
 export const authResolvers = {
@@ -59,6 +61,16 @@ export const authResolvers = {
         user: null,
       };
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+    });
 
     return {
       userErrors: [],
