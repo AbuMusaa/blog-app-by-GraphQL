@@ -12,9 +12,9 @@ export const typeDefs = gql`
     signup(
       email: String!
       name: String!
-      passwaord: String!
+      password: String!
       bio: String!
-    ): User
+    ): AuthPayload
   }
 
   type Post {
@@ -47,6 +47,11 @@ export const typeDefs = gql`
   type PostPayload {
     userErrors: [UserErrors!]!
     post: Post
+  }
+
+  type AuthPayload {
+    userErrors: [UserErrors!]!
+    user: User
   }
 
   input PostInput {
