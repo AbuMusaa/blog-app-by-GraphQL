@@ -2,6 +2,8 @@ import { User, Prisma } from "@prisma/client";
 import { Context } from "../../index";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { JWT_SiGNATURE } from "../../kyes";
 
 interface SingupArgs {
   email: string;
@@ -14,7 +16,7 @@ interface UserPayload {
   userErrors: {
     message: string;
   }[];
-  user: User | Prisma.Prisma__UserClient<User> | null;
+  token: string | null;
 }
 
 export const authResolvers = {
@@ -32,7 +34,7 @@ export const authResolvers = {
             message: "Invaild email",
           },
         ],
-        user: null,
+        token: null,
       };
     }
 
@@ -47,7 +49,7 @@ export const authResolvers = {
             message: "invalid password!. minimum lengt is 6",
           },
         ],
-        user: null,
+        token: null,
       };
     }
 
@@ -58,13 +60,13 @@ export const authResolvers = {
             message: "invalid name or bio",
           },
         ],
-        user: null,
+        token: null,
       };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email,
         name,
@@ -72,9 +74,19 @@ export const authResolvers = {
       },
     });
 
+    const token = jwt.sign(
+      {
+        userId: user.id,
+      },
+      JWT_SiGNATURE,
+      {
+        expiresIn: 360000,
+      }
+    );
+
     return {
       userErrors: [],
-      user: null,
+      token,
     };
   },
 };

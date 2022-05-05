@@ -192,4 +192,7 @@ $RECYCLE.BIN/
 # TO-DO txt file
 TO-DO.txt
 
+# keys.ts file
+kyes.ts
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,node
